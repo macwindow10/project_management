@@ -57,51 +57,213 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Project Management Dashboard</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between py-4 md:py-8">
+        <h1 className="text-2xl font-semibold text-gray-900"></h1>
+        <div className="mt-4 md:mt-0">
+          <span className="text-sm font-medium text-gray-500">
+            Last updated: {new Date().toLocaleDateString()}
+          </span>
+        </div>
+      </div>
 
       {/* Stats Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2">Total Projects</h2>
-          <p className="text-3xl">{projects.length}</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+        <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 p-3 bg-indigo-500 rounded-md">
+                <svg
+                  className="h-6 w-6 text-white"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    Total Projects
+                  </dt>
+                  <dd className="flex items-baseline">
+                    <div className="text-2xl font-semibold text-gray-900">
+                      {projects.length}
+                    </div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2">Total Team Members</h2>
-          <p className="text-3xl">{persons.length}</p>
+        <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 p-3 bg-emerald-500 rounded-md">
+                <svg
+                  className="h-6 w-6 text-white"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    Team Members
+                  </dt>
+                  <dd className="flex items-baseline">
+                    <div className="text-2xl font-semibold text-gray-900">
+                      {persons.length}
+                    </div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2">Total Hardware Items</h2>
-          <p className="text-3xl">{hardware.length}</p>
+        <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 p-3 bg-blue-500 rounded-md">
+                <svg
+                  className="h-6 w-6 text-white"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-gray-500 truncate">
+                    Hardware Items
+                  </dt>
+                  <dd className="flex items-baseline">
+                    <div className="text-2xl font-semibold text-gray-900">
+                      {hardware.length}
+                    </div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Search Section */}
       <div className="mb-8">
-        <input
-          type="text"
-          placeholder="Search projects or persons..."
-          className="w-full p-2 border rounded"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="max-w-lg">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg
+                className="h-5 w-5 text-gray-400"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="Search projects or persons..."
+              className="block w-full pl-10 pr-3 py-[5px] border border-[#d0d7de] rounded-md bg-[#f6f8fa] text-[#1F2328] placeholder-[#656d76] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da] text-[14px] leading-normal"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Projects Section */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-medium text-gray-900">Active Projects</h2>
+          <a
+            href="/projects"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            View all projects
+          </a>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="bg-white p-4 rounded-lg shadow cursor-pointer hover:shadow-lg transition-shadow"
+              className="bg-white overflow-hidden shadow-sm rounded-lg hover:shadow-md transition-shadow duration-300 ease-in-out cursor-pointer"
               onClick={() => setSelectedProject(project)}
             >
-              <h3 className="text-lg font-semibold">{project.name}</h3>
-              <p className="text-gray-600">
-                Status: {formatEnumValue(project.status)}
-              </p>
-              <p className="text-gray-600">Client: {project.clientName}</p>
+              <div className="p-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900 mb-1">
+                    {project.name}
+                  </h3>
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                    ${
+                      project.status === "IN_PROGRESS"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : project.status === "COMPLETED"
+                        ? "bg-green-100 text-green-800"
+                        : project.status === "ON_HOLD"
+                        ? "bg-gray-100 text-gray-800"
+                        : "bg-blue-100 text-blue-800"
+                    }`}
+                  >
+                    {formatEnumValue(project.status)}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">
+                  Client: {project.clientName}
+                </p>
+                <div className="mt-4 flex items-center">
+                  {project.teamMembers.slice(0, 3).map((member, index) =>
+                    member.picture ? (
+                      <img
+                        key={member.id}
+                        src={member.picture}
+                        alt={member.name}
+                        className={`w-8 h-8 rounded-full border-2 border-white ${
+                          index > 0 ? "-ml-2" : ""
+                        }`}
+                      />
+                    ) : (
+                      <div
+                        key={member.id}
+                        className={`w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white ${
+                          index > 0 ? "-ml-2" : ""
+                        }`}
+                      >
+                        <span className="text-xs text-gray-500">
+                          {member.name.charAt(0)}
+                        </span>
+                      </div>
+                    )
+                  )}
+                  {project.teamMembers.length > 3 && (
+                    <span className="text-sm text-gray-500 ml-2">
+                      +{project.teamMembers.length - 3} more
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -109,28 +271,54 @@ export default function Dashboard() {
 
       {/* Team Members Section */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Team Members</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-medium text-gray-900">Team Members</h2>
+          <a
+            href="/persons"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            View all members
+          </a>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPersons.map((person) => (
             <div
               key={person.id}
-              className="bg-white p-4 rounded-lg shadow cursor-pointer hover:shadow-lg transition-shadow"
+              className="bg-white overflow-hidden shadow-sm rounded-lg hover:shadow-md transition-shadow duration-300 ease-in-out cursor-pointer"
               onClick={() => setSelectedPerson(person)}
             >
-              <div className="flex items-center mb-2">
-                {person.picture && (
-                  <img
-                    src={person.picture}
-                    alt={person.name}
-                    className="w-10 h-10 rounded-full mr-2"
-                  />
-                )}
-                <div>
-                  <h3 className="text-lg font-semibold">{person.name}</h3>
-                  <p className="text-gray-600">
-                    {formatEnumValue(person.role)}
-                  </p>
+              <div className="p-6">
+                <div className="flex items-center space-x-4">
+                  {person.picture ? (
+                    <img
+                      src={person.picture}
+                      alt={person.name}
+                      className="w-12 h-12 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                      <span className="text-xl font-medium text-indigo-700">
+                        {person.name.charAt(0)}
+                      </span>
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900">
+                      {person.name}
+                    </h3>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-1">
+                      {formatEnumValue(person.role)}
+                    </span>
+                  </div>
                 </div>
+                {person.leadingProjects &&
+                  person.leadingProjects.length > 0 && (
+                    <div className="mt-4">
+                      <p className="text-sm text-gray-500">
+                        Leading {person.leadingProjects.length} project(s)
+                      </p>
+                    </div>
+                  )}
               </div>
             </div>
           ))}
@@ -139,120 +327,309 @@ export default function Dashboard() {
 
       {/* Project Details Modal */}
       {selectedProject && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-4">{selectedProject.name}</h2>
-            <p className="mb-2">
-              <span className="font-semibold">Description:</span>{" "}
-              {selectedProject.description}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Status:</span>{" "}
-              {formatEnumValue(selectedProject.status)}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Client:</span>{" "}
-              {selectedProject.clientName}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Team Lead:</span>{" "}
-              {selectedProject.teamLead.name}
-            </p>
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Team Members:</h3>
-              <ul className="list-disc pl-5">
-                {selectedProject.teamMembers.map((member) => (
-                  <li key={member.id}>{member.name}</li>
-                ))}
-              </ul>
-            </div>
-            {selectedProject.attachments.length > 0 && (
-              <div className="mb-4">
-                <h3 className="font-semibold mb-2">Attachments:</h3>
-                <ul className="list-disc pl-5">
-                  {selectedProject.attachments.map((file) => (
-                    <li key={file.id}>
-                      <a
-                        href={file.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        {file.fileName}
-                      </a>
-                      {file.fileSize && (
-                        <span className="text-gray-500 text-sm ml-2">
-                          ({(file.fileSize / 1024).toFixed(1)} KB)
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-50">
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                      <div className="flex justify-between items-start">
+                        <h2 className="text-xl font-semibold text-gray-900">
+                          {selectedProject.name}
+                        </h2>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                          ${
+                            selectedProject.status === "IN_PROGRESS"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : selectedProject.status === "COMPLETED"
+                              ? "bg-green-100 text-green-800"
+                              : selectedProject.status === "ON_HOLD"
+                              ? "bg-gray-100 text-gray-800"
+                              : "bg-blue-100 text-blue-800"
+                          }`}
+                        >
+                          {formatEnumValue(selectedProject.status)}
                         </span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+                      </div>
+                      <div className="mt-4 space-y-4">
+                        <div>
+                          <h3 className="text-sm font-medium text-gray-900">
+                            Description
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-500">
+                            {selectedProject.description}
+                          </p>
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-medium text-gray-900">
+                            Client
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-500">
+                            {selectedProject.clientName}
+                          </p>
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-medium text-gray-900">
+                            Team
+                          </h3>
+                          <div className="mt-2">
+                            <div className="flex items-center space-x-2 mb-2">
+                              {selectedProject.teamLead.picture ? (
+                                <img
+                                  src={selectedProject.teamLead.picture}
+                                  alt={selectedProject.teamLead.name}
+                                  className="w-8 h-8 rounded-full"
+                                />
+                              ) : (
+                                <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
+                                  <span className="text-sm font-medium text-indigo-700">
+                                    {selectedProject.teamLead.name.charAt(0)}
+                                  </span>
+                                </div>
+                              )}
+                              <span className="text-sm text-gray-900">
+                                {selectedProject.teamLead.name}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                (Team Lead)
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              {selectedProject.teamMembers.map((member) => (
+                                <div
+                                  key={member.id}
+                                  className="flex items-center space-x-2"
+                                >
+                                  {member.picture ? (
+                                    <img
+                                      src={member.picture}
+                                      alt={member.name}
+                                      className="w-6 h-6 rounded-full"
+                                    />
+                                  ) : (
+                                    <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
+                                      <span className="text-xs text-gray-700">
+                                        {member.name.charAt(0)}
+                                      </span>
+                                    </div>
+                                  )}
+                                  <span className="text-sm text-gray-500">
+                                    {member.name}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        {selectedProject.attachments.length > 0 && (
+                          <div>
+                            <h3 className="text-sm font-medium text-gray-900">
+                              Attachments
+                            </h3>
+                            <ul className="mt-2 divide-y divide-gray-200">
+                              {selectedProject.attachments.map((file) => (
+                                <li
+                                  key={file.id}
+                                  className="py-2 flex items-center justify-between"
+                                >
+                                  <div className="flex items-center">
+                                    <svg
+                                      className="h-5 w-5 text-gray-400"
+                                      fill="none"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                    <a
+                                      href={file.fileUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="ml-2 text-sm text-indigo-600 hover:text-indigo-900"
+                                    >
+                                      {file.fileName}
+                                    </a>
+                                  </div>
+                                  {file.fileSize && (
+                                    <span className="text-sm text-gray-500">
+                                      {(file.fileSize / 1024).toFixed(1)} KB
+                                    </span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <button
+                    type="button"
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    onClick={() => setSelectedProject(null)}
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
-            )}
-            <button
-              className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
-              onClick={() => setSelectedProject(null)}
-            >
-              Close
-            </button>
+            </div>
           </div>
         </div>
       )}
 
       {/* Person Details Modal */}
       {selectedPerson && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center mb-4">
-              {selectedPerson.picture && (
-                <img
-                  src={selectedPerson.picture}
-                  alt={selectedPerson.name}
-                  className="w-20 h-20 rounded-full mr-4"
-                />
-              )}
-              <div>
-                <h2 className="text-2xl font-bold">{selectedPerson.name}</h2>
-                <p className="text-gray-600">
-                  {formatEnumValue(selectedPerson.role)}
-                </p>
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-50">
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                      <div className="flex items-center space-x-4 mb-6">
+                        {selectedPerson.picture ? (
+                          <img
+                            src={selectedPerson.picture}
+                            alt={selectedPerson.name}
+                            className="w-16 h-16 rounded-full"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center">
+                            <span className="text-2xl font-medium text-indigo-700">
+                              {selectedPerson.name.charAt(0)}
+                            </span>
+                          </div>
+                        )}
+                        <div>
+                          <h2 className="text-xl font-semibold text-gray-900">
+                            {selectedPerson.name}
+                          </h2>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-1">
+                            {formatEnumValue(selectedPerson.role)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        {selectedPerson.leadingProjects &&
+                          selectedPerson.leadingProjects.length > 0 && (
+                            <div>
+                              <h3 className="text-sm font-medium text-gray-900 mb-2">
+                                Leading Projects
+                              </h3>
+                              <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="space-y-2">
+                                  {selectedPerson.leadingProjects.map(
+                                    (project) => (
+                                      <div
+                                        key={project.id}
+                                        className="flex items-center justify-between"
+                                      >
+                                        <span className="text-sm text-gray-900">
+                                          {project.name}
+                                        </span>
+                                        <span
+                                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                      ${
+                                        project.status === "IN_PROGRESS"
+                                          ? "bg-yellow-100 text-yellow-800"
+                                          : project.status === "COMPLETED"
+                                          ? "bg-green-100 text-green-800"
+                                          : project.status === "ON_HOLD"
+                                          ? "bg-gray-100 text-gray-800"
+                                          : "bg-blue-100 text-blue-800"
+                                      }`}
+                                        >
+                                          {formatEnumValue(project.status)}
+                                        </span>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                        {selectedPerson.memberOfProjects &&
+                          selectedPerson.memberOfProjects.length > 0 && (
+                            <div>
+                              <h3 className="text-sm font-medium text-gray-900 mb-2">
+                                Member of Projects
+                              </h3>
+                              <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                  {selectedPerson.memberOfProjects.map(
+                                    (project) => (
+                                      <div
+                                        key={project.id}
+                                        className="text-sm text-gray-900"
+                                      >
+                                        {project.name}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                        {selectedPerson.assignedHardware &&
+                          selectedPerson.assignedHardware.length > 0 && (
+                            <div>
+                              <h3 className="text-sm font-medium text-gray-900 mb-2">
+                                Assigned Hardware
+                              </h3>
+                              <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                  {selectedPerson.assignedHardware.map(
+                                    (item) => (
+                                      <div
+                                        key={item.id}
+                                        className="flex items-center space-x-2"
+                                      >
+                                        <svg
+                                          className="h-4 w-4 text-gray-400"
+                                          fill="none"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          viewBox="0 0 24 24"
+                                          stroke="currentColor"
+                                        >
+                                          <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                        <span className="text-sm text-gray-900">
+                                          {item.name}
+                                        </span>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <button
+                    type="button"
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    onClick={() => setSelectedPerson(null)}
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
-
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Leading Projects:</h3>
-              <ul className="list-disc pl-5">
-                {selectedPerson.leadingProjects?.map((project) => (
-                  <li key={project.id}>{project.name}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Member of Projects:</h3>
-              <ul className="list-disc pl-5">
-                {selectedPerson.memberOfProjects?.map((project) => (
-                  <li key={project.id}>{project.name}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Assigned Hardware:</h3>
-              <ul className="list-disc pl-5">
-                {selectedPerson.assignedHardware?.map((item) => (
-                  <li key={item.id}>{item.name}</li>
-                ))}
-              </ul>
-            </div>
-
-            <button
-              className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
-              onClick={() => setSelectedPerson(null)}
-            >
-              Close
-            </button>
           </div>
         </div>
       )}

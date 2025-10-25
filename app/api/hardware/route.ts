@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
             data: {
                 name: data.name,
                 description: data.description,
-                dateOfPurchase: data.dateOfPurchase,
+                dateOfPurchase: new Date(data.dateOfPurchase),
                 issuedToId: data.issuedToId,
             },
             include: {
@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
         });
         return NextResponse.json(hardware);
     } catch (error) {
+        console.log(error);
         return NextResponse.json({ error: 'Error creating hardware' }, { status: 500 });
     }
 }
