@@ -1,15 +1,84 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL")
+}
+
+// Define as constants in code instead of enums in the database
+// ProjectStatus: Under_Development, Developed_Not_Deployed, Deployed, Deployed_Enhancements, Inactive
+// PersonRole: TeamLead, Developer, Tester
+
+model Person {
+  id                  String     @id @default(uuid())
+  role                String     // Will store PersonRole values
+  name                String
+  picture             String?    // URL to the picture
+  leadingProjects     Project[]  @relation("TeamLead")
+  memberOfProjects    TeamMember[]
+  assignedHardware    Hardware[]
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+}
+
+model Project {
+  id              String        @id @default(uuid())
+  name            String
+  description     String?       @db.Text
+  startDate       DateTime
+  status          String     // Will store ProjectStatus values
+  teamLead        Person        @relation("TeamLead", fields: [teamLeadId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  teamLeadId      String
+  teamMembers     TeamMember[]
+  clientName      String
+  latestUpdate    String?       @db.Text
+  attachments     ProjectAttachment[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([teamLeadId])
+}
+
+model ProjectAttachment {
+  id          String    @id @default(uuid())
+  fileName    String
+  fileUrl     String
+  fileType    String?
+  fileSize    Int?
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String
+  uploadedAt  DateTime  @default(now())
+  
+  @@index([projectId])
+}
+
+model Hardware {
+  id              String    @id @default(uuid())
+  dateOfPurchase  DateTime
+  name            String
+  description     String?   @db.Text
+  issuedTo        Person?   @relation(fields: [issuedToId], references: [id])
+  issuedToId      String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([issuedToId])
+}
+
+model TeamMember {
+  id          String   @id @default(uuid())
+  person      Person   @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  personId    String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  projectId   String
+  joinedAt    DateTime @default(now())
+
+  @@unique([personId, projectId])
+  @@index([personId])
+  @@index([projectId])
 }
