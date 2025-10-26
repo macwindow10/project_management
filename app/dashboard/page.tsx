@@ -218,11 +218,11 @@ export default function Dashboard() {
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                     ${
-                      project.status === "IN_PROGRESS"
+                      project.status === "Under_Development"
                         ? "bg-yellow-100 text-yellow-800"
-                        : project.status === "COMPLETED"
+                        : project.status === "Deployed"
                         ? "bg-green-100 text-green-800"
-                        : project.status === "ON_HOLD"
+                        : project.status === "Developed_Not_Deployed"
                         ? "bg-gray-100 text-gray-800"
                         : "bg-blue-100 text-blue-800"
                     }`}
@@ -341,11 +341,12 @@ export default function Dashboard() {
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                           ${
-                            selectedProject.status === "IN_PROGRESS"
+                            selectedProject.status === "Under_Development"
                               ? "bg-yellow-100 text-yellow-800"
-                              : selectedProject.status === "COMPLETED"
+                              : selectedProject.status === "Deployed"
                               ? "bg-green-100 text-green-800"
-                              : selectedProject.status === "ON_HOLD"
+                              : selectedProject.status ===
+                                "Developed_Not_Deployed"
                               ? "bg-gray-100 text-gray-800"
                               : "bg-blue-100 text-blue-800"
                           }`}
