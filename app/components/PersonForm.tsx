@@ -41,11 +41,11 @@ export function PersonForm({ onSubmit, initialData = null }: PersonFormProps) {
 
       const { files: uploadedFiles } = await response.json();
       console.log("Uploaded picture:", uploadedFiles);
-      
+
       if (uploadedFiles && uploadedFiles.length > 0) {
         const pictureUrl = uploadedFiles[0].fileUrl;
         console.log("Setting picture URL:", pictureUrl);
-        
+
         setFormData((prev) => ({
           ...prev,
           picture: pictureUrl,
@@ -116,7 +116,7 @@ export function PersonForm({ onSubmit, initialData = null }: PersonFormProps) {
 
       <button
         type="submit"
-        className="inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+        className="inline-flex justify-center rounded-lg border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 transition-all duration-200"
       >
         {initialData ? "Update Person" : "Create Person"}
       </button>
