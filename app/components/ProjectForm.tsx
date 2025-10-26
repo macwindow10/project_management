@@ -11,6 +11,10 @@ interface ProjectFormData {
   teamLeadId: string;
   clientName: string;
   latestUpdate: string;
+  toolStack: string;
+  database: string;
+  deploymentDetails: string;
+  usersCount: number;
   teamMemberIds: string[];
   attachments: {
     fileName: string;
@@ -39,6 +43,10 @@ export function ProjectForm({
     teamLeadId: initialData?.teamLeadId || "",
     clientName: initialData?.clientName || "",
     latestUpdate: initialData?.latestUpdate || "",
+    toolStack: initialData?.toolStack || "",
+    database: initialData?.database || "",
+    deploymentDetails: initialData?.deploymentDetails || "",
+    usersCount: initialData?.usersCount || 0,
     teamMemberIds: initialData?.teamMembers?.map((member) => member.id) || [],
     attachments: initialData?.attachments || [],
   });
@@ -116,6 +124,63 @@ export function ProjectForm({
             required
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="mt-1 block w-full h-10 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200 text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Tool Stack
+          </label>
+          <input
+            type="text"
+            value={formData.toolStack}
+            onChange={(e) =>
+              setFormData({ ...formData, toolStack: e.target.value })
+            }
+            className="mt-1 block w-full h-10 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200 text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Database
+          </label>
+          <input
+            type="text"
+            value={formData.database}
+            onChange={(e) =>
+              setFormData({ ...formData, database: e.target.value })
+            }
+            className="mt-1 block w-full h-10 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200 text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Deployment Details
+          </label>
+          <input
+            type="text"
+            value={formData.deploymentDetails}
+            onChange={(e) =>
+              setFormData({ ...formData, deploymentDetails: e.target.value })
+            }
+            className="mt-1 block w-full h-10 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200 text-sm"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Users Count
+          </label>
+          <input
+            type="number"
+            min={0}
+            value={formData.usersCount}
+            onChange={(e) =>
+              setFormData({ ...formData, usersCount: Number(e.target.value) })
+            }
             className="mt-1 block w-full h-10 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200 text-sm"
           />
         </div>

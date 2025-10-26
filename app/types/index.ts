@@ -59,7 +59,23 @@ export interface Project {
     teamMembers: Person[];
     clientName: string;
     latestUpdate?: string;
+    toolStack: string;
+    database: string;
+    deploymentDetails: string;
+    usersCount: number;
     attachments: ProjectAttachment[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface Task {
+    id: string;
+    projectId: string;
+    personId?: string;
+    title: string;
+    startDate: Date;
+    endDate: Date;
+    status: string; // Created, InProgress, Completed
     createdAt: Date;
     updatedAt: Date;
 }

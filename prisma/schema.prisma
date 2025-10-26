@@ -15,68 +15,91 @@ datasource db {
 // PersonRole: TeamLead, Developer, Tester
 
 model Person {
-  id                  String     @id @default(uuid())
-  role                String     // Will store PersonRole values
-  name                String
-  picture             String?    // URL to the picture
-  leadingProjects     Project[]  @relation("TeamLead")
-  memberOfProjects    TeamMember[]
-  assignedHardware    Hardware[]
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
+  id               String       @id @default(uuid())
+  role             String // Will store PersonRole values
+  name             String
+  picture          String? // URL to the picture
+  leadingProjects  Project[]    @relation("TeamLead")
+  memberOfProjects TeamMember[]
+  assignedHardware Hardware[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  Task             Task[]
 }
 
 model Project {
-  id              String        @id @default(uuid())
-  name            String
-  description     String?       @db.Text
-  startDate       DateTime
-  status          String     // Will store ProjectStatus values
-  teamLead        Person        @relation("TeamLead", fields: [teamLeadId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  teamLeadId      String
-  teamMembers     TeamMember[]
-  clientName      String
-  latestUpdate    String?       @db.Text
-  attachments     ProjectAttachment[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id                String              @id @default(uuid())
+  name              String
+  description       String?             @db.Text
+  startDate         DateTime
+  status            String // Will store ProjectStatus values
+  teamLead          Person              @relation("TeamLead", fields: [teamLeadId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  teamLeadId        String
+  teamMembers       TeamMember[]
+  clientName        String
+  latestUpdate      String?             @db.Text
+  attachments       ProjectAttachment[]
+  toolStack         String              @default("")
+  database          String              @default("")
+  deploymentDetails String              @default("")
+  usersCount        Int                 @default(0)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  Task              Task[]
 
   @@index([teamLeadId])
 }
 
+model Task {
+  id        String   @id @default(uuid())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  projectId String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  personId  String
+  title     String
+  startDate DateTime
+  endDate   DateTime
+  status    String // Created, InProgress, Completed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([personId])
+}
+
 model ProjectAttachment {
-  id          String    @id @default(uuid())
-  fileName    String
-  fileUrl     String
-  fileType    String?
-  fileSize    Int?
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   String
-  uploadedAt  DateTime  @default(now())
-  
+  id         String   @id @default(uuid())
+  fileName   String
+  fileUrl    String
+  fileType   String?
+  fileSize   Int?
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String
+  uploadedAt DateTime @default(now())
+
   @@index([projectId])
 }
 
 model Hardware {
-  id              String    @id @default(uuid())
-  dateOfPurchase  DateTime
-  name            String
-  description     String?   @db.Text
-  issuedTo        Person?   @relation(fields: [issuedToId], references: [id])
-  issuedToId      String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id             String   @id @default(uuid())
+  dateOfPurchase DateTime
+  name           String
+  description    String?  @db.Text
+  issuedTo       Person?  @relation(fields: [issuedToId], references: [id])
+  issuedToId     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([issuedToId])
 }
 
 model TeamMember {
-  id          String   @id @default(uuid())
-  person      Person   @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  personId    String
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  projectId   String
-  joinedAt    DateTime @default(now())
+  id        String   @id @default(uuid())
+  person    Person   @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  personId  String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  projectId String
+  joinedAt  DateTime @default(now())
 
   @@unique([personId, projectId])
   @@index([personId])

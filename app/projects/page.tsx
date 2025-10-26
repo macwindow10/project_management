@@ -1,13 +1,31 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Project, Person } from "@/app/types";
 import { ProjectForm } from "@/app/components/ProjectForm";
+import TaskList from "@/app/components/TaskList";
 
 export default function ProjectsPage() {
+  const router = useRouter();
   const [teamModalOpen, setTeamModalOpen] = useState(false);
   const [teamProject, setTeamProject] = useState<Project | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<string[]>([]);
+  const [taskModalOpen, setTaskModalOpen] = useState(false);
+  const [taskProject, setTaskProject] = useState<Project | null>(null);
+  const [tasks, setTasks] = useState<any[]>([]);
+  const openTaskModal = async (project: Project) => {
+    setTaskProject(project);
+    setTaskModalOpen(true);
+    // Fetch tasks for this project
+    try {
+      const response = await fetch(`/api/tasks?projectId=${project.id}`);
+      const data = await response.json();
+      setTasks(data);
+    } catch (error) {
+      setTasks([]);
+    }
+  };
 
   const openTeamModal = (project: Project) => {
     setTeamProject(project);
@@ -188,9 +206,9 @@ export default function ProjectsPage() {
                 </div>
                 <div className="flex space-x-1 ml-2">
                   <button
-                    onClick={() => openTeamModal(project)}
+                    onClick={() => router.push(`/projects/${project.id}/tasks`)}
                     className="bg-black text-white p-2 rounded-md hover:bg-neutral-800 transition-colors"
-                    title="Manage team members"
+                    title="View Tasks"
                   >
                     <svg
                       className="w-4 h-4"
@@ -202,7 +220,13 @@ export default function ProjectsPage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                        d="M9 17v-2a4 4 0 014-4h6"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 7v2a4 4 0 004 4h6"
                       />
                     </svg>
                   </button>
@@ -427,6 +451,29 @@ export default function ProjectsPage() {
           </div>
         ))}
       </div>
+      {taskModalOpen && taskProject && (
+        <div className="fixed inset-0 bg-gray-50/90 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-5 max-w-2xl w-full">
+            <h2 className="text-xl font-semibold text-gray-900 mb-3">
+              Tasks for {taskProject.name}
+            </h2>
+            <TaskList
+              projectId={taskProject.id}
+              tasks={tasks}
+              persons={persons}
+              onClose={() => setTaskModalOpen(false)}
+              onTasksChange={async () => {
+                // Refresh tasks after create/update
+                const response = await fetch(
+                  `/api/tasks?projectId=${taskProject.id}`
+                );
+                const data = await response.json();
+                setTasks(data);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

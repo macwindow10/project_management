@@ -37,6 +37,10 @@ export async function POST(request: NextRequest) {
                 teamLeadId: data.teamLeadId,
                 clientName: data.clientName,
                 latestUpdate: data.latestUpdate,
+                toolStack: data.toolStack,
+                database: data.database,
+                deploymentDetails: data.deploymentDetails,
+                usersCount: data.usersCount,
                 attachments: {
                     create: data.attachments?.map((attachment: any) => ({
                         fileName: attachment.fileName,

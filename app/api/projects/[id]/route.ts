@@ -71,6 +71,10 @@ export async function PUT(
                 teamLeadId: data.teamLeadId,
                 clientName: data.clientName,
                 latestUpdate: data.latestUpdate,
+                toolStack: data.toolStack,
+                database: data.database,
+                deploymentDetails: data.deploymentDetails,
+                usersCount: data.usersCount,
                 attachments: {
                     create: attachmentsToCreate,
                 },
@@ -84,10 +88,10 @@ export async function PUT(
                 attachments: true,
             },
         });
-        
+
         console.log('Updated project attachments:', project.attachments);
         console.log('=== END UPDATE PROJECT API ===');
-        
+
         return NextResponse.json(project);
     } catch (error) {
         console.error('Error updating project:', error);
