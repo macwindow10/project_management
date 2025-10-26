@@ -7,8 +7,9 @@ export async function GET(
     { params }: { params: { id: string } }
 ) {
     try {
+        const resolvedParams = await params;
         const project = await prisma.project.findUnique({
-            where: { id: params.id },
+            where: { id: resolvedParams.id },
             include: {
                 teamLead: true,
                 teamMembers: true,
@@ -32,6 +33,7 @@ export async function PUT(
 ) {
     try {
         const data = await request.json();
+        const resolvedParams = await params;
 
         if (!isValidProjectStatus(data.status)) {
             return NextResponse.json(
@@ -42,15 +44,15 @@ export async function PUT(
 
         // First, delete all existing attachments
         await prisma.projectAttachment.deleteMany({
-            where: { projectId: params.id },
+            where: { projectId: resolvedParams.id },
         });
 
         const project = await prisma.project.update({
-            where: { id: params.id },
+            where: { id: resolvedParams.id },
             data: {
                 name: data.name,
                 description: data.description,
-                startDate: data.startDate,
+                startDate: new Date(data.startDate),
                 status: data.status,
                 teamLeadId: data.teamLeadId,
                 clientName: data.clientName,
@@ -75,6 +77,7 @@ export async function PUT(
         });
         return NextResponse.json(project);
     } catch (error) {
+        console.log(error);
         return NextResponse.json({ error: 'Error updating project' }, { status: 500 });
     }
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
-import { ProjectStatus, Project, PROJECT_STATUS } from "@/app/types";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { ProjectStatus, Project, PROJECT_STATUS, Person } from "@/app/types";
 
 interface ProjectFormData {
   name: string;
@@ -15,8 +15,8 @@ interface ProjectFormData {
   attachments: {
     fileName: string;
     fileUrl: string;
-    fileType: string;
-    fileSize: number;
+    fileType?: string;
+    fileSize?: number;
   }[];
 }
 
@@ -43,6 +43,21 @@ export function ProjectForm({
     attachments: initialData?.attachments || [],
   });
 
+  const [persons, setPersons] = useState<Person[]>([]);
+
+  useEffect(() => {
+    const fetchPersons = async () => {
+      try {
+        const response = await fetch("/api/persons");
+        const data = await response.json();
+        setPersons(data);
+      } catch (error) {
+        console.error("Error fetching persons:", error);
+      }
+    };
+    fetchPersons();
+  }, []);
+
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
@@ -68,7 +83,8 @@ export function ProjectForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-5 rounded-lg">
+    <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-5 rounded-lg">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Name
@@ -134,6 +150,27 @@ export function ProjectForm({
 
       <div>
         <label className="block text-sm font-medium text-gray-700">
+          Team Lead
+        </label>
+        <select
+          required
+          value={formData.teamLeadId}
+          onChange={(e) =>
+            setFormData({ ...formData, teamLeadId: e.target.value })
+          }
+          className="mt-1 block w-full h-12 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400"
+        >
+          <option value="">Select Team Lead</option>
+          {persons.map((person) => (
+            <option key={person.id} value={person.id}>
+              {person.name} ({person.role.replace(/_/g, " ")})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
           Client Name
         </label>
         <input
@@ -172,12 +209,13 @@ export function ProjectForm({
         />
       </div>
 
-      <button
-        type="submit"
-        className="inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
-      >
-        {initialData ? "Update Project" : "Create Project"}
-      </button>
-    </form>
+        <button
+          type="submit"
+          className="inline-flex justify-center rounded-lg border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+        >
+          {initialData ? "Update Project" : "Create Project"}
+        </button>
+      </form>
+    </div>
   );
 }
