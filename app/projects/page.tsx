@@ -5,6 +5,37 @@ import { Project, Person } from "@/app/types";
 import { ProjectForm } from "@/app/components/ProjectForm";
 
 export default function ProjectsPage() {
+  const [teamModalOpen, setTeamModalOpen] = useState(false);
+  const [teamProject, setTeamProject] = useState<Project | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<string[]>([]);
+
+  const openTeamModal = (project: Project) => {
+    setTeamProject(project);
+    setSelectedTeam(
+      project.teamMembers ? project.teamMembers.map((m) => m.id) : []
+    );
+    setTeamModalOpen(true);
+  };
+
+  const handleTeamChange = (personId: string) => {
+    setSelectedTeam((prev) =>
+      prev.includes(personId)
+        ? prev.filter((id) => id !== personId)
+        : [...prev, personId]
+    );
+  };
+
+  const handleTeamSubmit = async () => {
+    if (!teamProject) return;
+    await fetch(`/api/projects/${teamProject.id}/team`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ teamMemberIds: selectedTeam }),
+    });
+    fetchProjects();
+    setTeamModalOpen(false);
+    setTeamProject(null);
+  };
   const [projects, setProjects] = useState<Project[]>([]);
   const [persons, setPersons] = useState<Person[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -156,6 +187,111 @@ export default function ProjectsPage() {
                   </div>
                 </div>
                 <div className="flex space-x-1 ml-2">
+                  <button
+                    onClick={() => openTeamModal(project)}
+                    className="bg-black text-white p-2 rounded-md hover:bg-neutral-800 transition-colors"
+                    title="Manage team members"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  </button>
+                  {teamModalOpen && teamProject && (
+                    <div className="fixed inset-0 bg-gray-50/90 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-5 max-w-xl w-full">
+                        <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                          Manage Team Members
+                        </h2>
+                        <div className="mb-4">
+                          <div className="font-medium mb-2">
+                            Assign or remove team members for{" "}
+                            <span className="font-bold">
+                              {teamProject.name}
+                            </span>
+                            :
+                          </div>
+                          <div className="mb-2">
+                            <label className="block mb-1 font-medium">
+                              Select team members:
+                            </label>
+                            <select
+                              multiple
+                              value={selectedTeam}
+                              onChange={(e) => {
+                                const options = Array.from(
+                                  e.target.selectedOptions
+                                ).map((opt) => opt.value);
+                                setSelectedTeam(options);
+                              }}
+                              className="w-full border rounded p-2"
+                              size={Math.min(8, persons.length)}
+                            >
+                              {persons.map((person) => (
+                                <option key={person.id} value={person.id}>
+                                  {person.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="mt-2">
+                            <span className="font-medium">
+                              Already assigned:
+                            </span>
+                            <ul className="list-disc ml-5 text-sm mt-1">
+                              {teamProject.teamMembers &&
+                              teamProject.teamMembers.length > 0 ? (
+                                teamProject.teamMembers.map((member) => {
+                                  const person = persons.find(
+                                    (p) =>
+                                      p.id === member.personId ||
+                                      p.id === member.id
+                                  );
+                                  return (
+                                    <li key={member.id}>
+                                      {person
+                                        ? person.name
+                                        : member.name || member.id}
+                                    </li>
+                                  );
+                                })
+                              ) : (
+                                <li className="text-gray-400">
+                                  No team members assigned
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        </div>
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            onClick={() => {
+                              setTeamModalOpen(false);
+                              setTeamProject(null);
+                            }}
+                            className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleTeamSubmit}
+                            className="px-4 py-2 rounded bg-black text-white hover:bg-neutral-800"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <button
                     onClick={() => {
                       setEditingProject(project);
