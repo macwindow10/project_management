@@ -234,12 +234,20 @@ export default function Dashboard() {
                   Client: {project.clientName}
                 </p>
                 <div className="mt-4 flex items-center">
-                  {project.teamMembers.slice(0, 3).map((member, index) =>
-                    member.picture ? (
+                  {project.teamMembers.slice(0, 3).map((member, index) => {
+                    // Find the corresponding person if member.name is missing
+                    // console.log("Member: ", member);
+                    // console.log("Persons : ", persons);
+                    const displayName =
+                      member.name ||
+                      (persons.find((p) => p.id === member.personId)?.name ??
+                        "?");
+                    const displayInitial = displayName.charAt(0);
+                    return member.picture ? (
                       <img
                         key={member.id}
                         src={member.picture}
-                        alt={member.name}
+                        alt={displayName}
                         className={`w-8 h-8 rounded-full border-2 border-white ${
                           index > 0 ? "-ml-2" : ""
                         }`}
@@ -252,11 +260,11 @@ export default function Dashboard() {
                         }`}
                       >
                         <span className="text-xs text-gray-500">
-                          {member.name.charAt(0)}
+                          {displayInitial}
                         </span>
                       </div>
-                    )
-                  )}
+                    );
+                  })}
                   {project.teamMembers.length > 3 && (
                     <span className="text-sm text-gray-500 ml-2">
                       +{project.teamMembers.length - 3} more
@@ -398,29 +406,37 @@ export default function Dashboard() {
                               </span>
                             </div>
                             <div className="grid grid-cols-2 gap-2">
-                              {selectedProject.teamMembers.map((member) => (
-                                <div
-                                  key={member.id}
-                                  className="flex items-center space-x-2"
-                                >
-                                  {member.picture ? (
-                                    <img
-                                      src={member.picture}
-                                      alt={member.name}
-                                      className="w-6 h-6 rounded-full"
-                                    />
-                                  ) : (
-                                    <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
-                                      <span className="text-xs text-gray-700">
-                                        {member.name.charAt(0)}
-                                      </span>
-                                    </div>
-                                  )}
-                                  <span className="text-sm text-gray-500">
-                                    {member.name}
-                                  </span>
-                                </div>
-                              ))}
+                              {selectedProject.teamMembers.map((member) => {
+                                const displayName =
+                                  member.name ||
+                                  (persons.find((p) => p.id === member.personId)
+                                    ?.name ??
+                                    "?");
+                                const displayInitial = displayName.charAt(0);
+                                return (
+                                  <div
+                                    key={member.id}
+                                    className="flex items-center space-x-2"
+                                  >
+                                    {member.picture ? (
+                                      <img
+                                        src={member.picture}
+                                        alt={displayName}
+                                        className="w-6 h-6 rounded-full"
+                                      />
+                                    ) : (
+                                      <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
+                                        <span className="text-xs text-gray-700">
+                                          {displayInitial}
+                                        </span>
+                                      </div>
+                                    )}
+                                    <span className="text-sm text-gray-500">
+                                      {displayName}
+                                    </span>
+                                  </div>
+                                );
+                              })}
                             </div>
                           </div>
                         </div>
