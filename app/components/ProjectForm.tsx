@@ -35,7 +35,7 @@ export function ProjectForm({
     startDate: initialData?.startDate
       ? new Date(initialData.startDate).toISOString().split("T")[0]
       : "",
-    status: initialData?.status || ProjectStatus.Under_Development,
+    status: initialData?.status || "Under_Development",
     teamLeadId: initialData?.teamLeadId || "",
     clientName: initialData?.clientName || "",
     latestUpdate: initialData?.latestUpdate || "",

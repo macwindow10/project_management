@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
             data: {
                 name: data.name,
                 description: data.description,
-                startDate: data.startDate,
+                startDate: new Date(data.startDate),
                 status: data.status,
                 teamLeadId: data.teamLeadId,
                 clientName: data.clientName,
@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
         });
         return NextResponse.json(project);
     } catch (error) {
+        console.error(error);
         return NextResponse.json({ error: 'Error creating project' }, { status: 500 });
     }
 }
