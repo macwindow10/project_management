@@ -35,6 +35,11 @@ export async function PUT(
         const data = await request.json();
         const resolvedParams = await params;
 
+        console.log('=== UPDATE PROJECT API ===');
+        console.log('Project ID:', resolvedParams.id);
+        console.log('Received attachments:', data.attachments);
+        console.log('Attachments count:', data.attachments?.length || 0);
+
         if (!isValidProjectStatus(data.status)) {
             return NextResponse.json(
                 { error: 'Invalid project status' },
@@ -47,6 +52,15 @@ export async function PUT(
             where: { projectId: resolvedParams.id },
         });
 
+        const attachmentsToCreate = data.attachments?.map((attachment: any) => ({
+            fileName: attachment.fileName,
+            fileUrl: attachment.fileUrl,
+            fileType: attachment.fileType,
+            fileSize: attachment.fileSize,
+        })) || [];
+
+        console.log('Attachments to create:', attachmentsToCreate);
+
         const project = await prisma.project.update({
             where: { id: resolvedParams.id },
             data: {
@@ -58,12 +72,7 @@ export async function PUT(
                 clientName: data.clientName,
                 latestUpdate: data.latestUpdate,
                 attachments: {
-                    create: data.attachments?.map((attachment: any) => ({
-                        fileName: attachment.fileName,
-                        fileUrl: attachment.fileUrl,
-                        fileType: attachment.fileType,
-                        fileSize: attachment.fileSize,
-                    })) || [],
+                    create: attachmentsToCreate,
                 },
                 teamMembers: {
                     set: data.teamMemberIds?.map((id: string) => ({ id })) || [],
@@ -75,9 +84,13 @@ export async function PUT(
                 attachments: true,
             },
         });
+        
+        console.log('Updated project attachments:', project.attachments);
+        console.log('=== END UPDATE PROJECT API ===');
+        
         return NextResponse.json(project);
     } catch (error) {
-        console.log(error);
+        console.error('Error updating project:', error);
         return NextResponse.json({ error: 'Error updating project' }, { status: 500 });
     }
 }

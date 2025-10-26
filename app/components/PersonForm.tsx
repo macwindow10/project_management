@@ -25,24 +25,41 @@ export function PersonForm({ onSubmit, initialData = null }: PersonFormProps) {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const formData = new FormData();
-    formData.append("files", files[0]);
+    const uploadFormData = new FormData();
+    uploadFormData.append("files", files[0]);
 
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadFormData,
+      });
 
-    const urls = await response.json();
-    // console.log(urls);
-    setFormData((prev) => ({
-      ...prev,
-      picture: urls[0],
-    }));
+      if (!response.ok) {
+        console.error("Failed to upload picture");
+        return;
+      }
+
+      const { files: uploadedFiles } = await response.json();
+      console.log("Uploaded picture:", uploadedFiles);
+      
+      if (uploadedFiles && uploadedFiles.length > 0) {
+        const pictureUrl = uploadedFiles[0].fileUrl;
+        console.log("Setting picture URL:", pictureUrl);
+        
+        setFormData((prev) => ({
+          ...prev,
+          picture: pictureUrl,
+        }));
+      }
+    } catch (error) {
+      console.error("Error uploading picture:", error);
+    }
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    console.log("Submitting person form data:", formData);
+    console.log("Picture URL:", formData.picture);
     onSubmit(formData);
   };
 

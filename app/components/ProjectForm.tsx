@@ -59,26 +59,45 @@ export function ProjectForm({
   }, []);
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+    if (!e.target.files || e.target.files.length === 0) return;
 
     const files = Array.from(e.target.files);
-    const formData = new FormData();
-    files.forEach((file) => formData.append("files", file));
+    const uploadFormData = new FormData();
+    files.forEach((file) => uploadFormData.append("files", file));
 
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadFormData,
+      });
 
-    const { files: uploadedFiles } = await response.json();
+      if (!response.ok) {
+        console.error("Failed to upload files");
+        return;
+      }
+
+      const { files: uploadedFiles } = await response.json();
+      console.log("Uploaded files:", uploadedFiles);
+      
+      setFormData((prev) => ({
+        ...prev,
+        attachments: [...prev.attachments, ...uploadedFiles],
+      }));
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
+
+  const handleRemoveAttachment = (index: number) => {
     setFormData((prev) => ({
       ...prev,
-      attachments: [...prev.attachments, ...uploadedFiles],
+      attachments: prev.attachments.filter((_, i) => i !== index),
     }));
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    console.log("Submitting form data:", formData);
     onSubmit(formData);
   };
 
@@ -198,9 +217,43 @@ export function ProjectForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
           Attachments
         </label>
+        
+        {formData.attachments.length > 0 && (
+          <div className="mb-3 space-y-2">
+            {formData.attachments.map((attachment, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between bg-gray-50 p-2 rounded-lg border border-gray-200"
+              >
+                <div className="flex items-center min-w-0 flex-1">
+                  <svg className="w-4 h-4 mr-2 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                  </svg>
+                  <span className="text-sm text-gray-700 truncate">{attachment.fileName}</span>
+                  {attachment.fileSize && (
+                    <span className="ml-2 text-xs text-gray-500 flex-shrink-0">
+                      ({(attachment.fileSize / 1024).toFixed(1)} KB)
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveAttachment(index)}
+                  className="ml-2 text-red-600 hover:text-red-800 p-1"
+                  title="Remove attachment"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        
         <input
           type="file"
           multiple

@@ -32,6 +32,12 @@ export async function PUT(
 ) {
     try {
         const data = await request.json();
+        const resolvedParams = await params;
+
+        console.log('=== UPDATE PERSON API ===');
+        console.log('Person ID:', resolvedParams.id);
+        console.log('Received data:', data);
+        console.log('Picture URL:', data.picture);
 
         if (!isValidPersonRole(data.role)) {
             return NextResponse.json(
@@ -41,7 +47,7 @@ export async function PUT(
         }
 
         const person = await prisma.person.update({
-            where: { id: params.id },
+            where: { id: resolvedParams.id },
             data: {
                 name: data.name,
                 role: data.role,
@@ -53,8 +59,14 @@ export async function PUT(
                 assignedHardware: true,
             },
         });
+        
+        console.log('Updated person:', person);
+        console.log('Saved picture URL:', person.picture);
+        console.log('=== END UPDATE PERSON API ===');
+        
         return NextResponse.json(person);
     } catch (error) {
+        console.error('Error updating person:', error);
         return NextResponse.json({ error: 'Error updating person' }, { status: 500 });
     }
 }

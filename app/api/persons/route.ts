@@ -21,6 +21,10 @@ export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
 
+        console.log('=== CREATE PERSON API ===');
+        console.log('Received data:', data);
+        console.log('Picture URL:', data.picture);
+
         if (!isValidPersonRole(data.role)) {
             return NextResponse.json(
                 { error: 'Invalid person role' },
@@ -40,8 +44,14 @@ export async function POST(request: NextRequest) {
                 assignedHardware: true,
             },
         });
+        
+        console.log('Created person:', person);
+        console.log('Saved picture URL:', person.picture);
+        console.log('=== END CREATE PERSON API ===');
+        
         return NextResponse.json(person);
     } catch (error) {
+        console.error('Error creating person:', error);
         return NextResponse.json({ error: 'Error creating person' }, { status: 500 });
     }
 }
